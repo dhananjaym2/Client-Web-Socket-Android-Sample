@@ -22,12 +22,22 @@
 
     <include layout="@layout/content_main" />
 
+    <EditText
+        android:id="@+id/editTextMessageToSend"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end|start"
+        android:layout_margin="@dimen/fab_margin"
+        android:layout_marginEnd="50dp"
+        android:hint="@string/Message"
+        android:inputType="text" />
+
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
-        app:srcCompat="@android:drawable/ic_dialog_email" />
+        app:srcCompat="@android:drawable/ic_media_play" />
 
 </android.support.design.widget.CoordinatorLayout>

@@ -2,14 +2,15 @@ package client.websocket;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.EditText;
 
 public class MainActivity extends AppCompatActivity {
+
+    private FloatingActionButton fab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -18,14 +19,30 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+        EditText editTextMessageToSend = findViewById(R.id.editTextMessageToSend);
+
+        fab = findViewById(R.id.fab);
+        fab.setOnClickListener(view -> {
+            if (editTextMessageToSend.getText().toString().isEmpty()) {
+                AppUtils.showSnackBar(fab, getString(R.string.PleaseEnterAMessageToSend));
+            } else {
+                //connectToWsServer
+                AppSingleton.getInstance().sendMessageToWebSocketServer(fab, editTextMessageToSend.getText().toString());
             }
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        //connectToWebServer
+        AppSingleton.getInstance().connectToWebSocketServer(fab);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        AppSingleton.getInstance().disconnectFromWebSocketServer();
     }
 
     @Override
