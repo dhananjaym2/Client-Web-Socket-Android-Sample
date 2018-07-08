@@ -39,10 +39,13 @@ public class MainActivity extends AppCompatActivity {
             if (editTextMessageToSend.getText().toString().isEmpty()) {
                 AppUtils.showSnackBar(fab, getString(R.string.PleaseEnterAMessageToSend));
             } else {
-                webSocketMessageArrayList.add(new WebSocketMessage(editTextMessageToSend.getText().toString(), new Date()));
-                messagesRecyclerViewAdapter.notifyItemInserted(webSocketMessageArrayList.size());
-                //connectToWsServer
-                AppSingleton.getInstance().sendMessageToWebSocketServer(fab, editTextMessageToSend.getText().toString());
+                if (AppUtils.isConnectedToInternet(this)) {
+                    webSocketMessageArrayList.add(new WebSocketMessage(editTextMessageToSend.getText().toString(), new Date()));
+                    messagesRecyclerViewAdapter.notifyItemInserted(webSocketMessageArrayList.size());
+                    //connectToWsServer
+                    AppSingleton.getInstance().sendMessageToWebSocketServer(fab, editTextMessageToSend.getText().toString());
+                } else
+                    AppUtils.showSnackBar(fab, getString(R.string.PleaseConnectThisDeviceToInternet));
             }
         });
     }
