@@ -16,9 +16,6 @@ import java.util.Date;
 public class MainActivity extends AppCompatActivity {
 
     private FloatingActionButton fab;
-    private RecyclerView recyclerView;
-    private MessagesRecyclerViewAdapter messagesRecyclerViewAdapter;
-    private ArrayList<WebSocketMessage> webSocketMessageArrayList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,11 +24,14 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        recyclerView = findViewById(R.id.recyclerView);
+        RecyclerView recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(MainActivity.this));
 
-        messagesRecyclerViewAdapter = new MessagesRecyclerViewAdapter(MainActivity.this, webSocketMessageArrayList);
+        ArrayList<WebSocketMessage> webSocketMessageArrayList = new ArrayList<>();
+
+        MessagesRecyclerViewAdapter messagesRecyclerViewAdapter = new MessagesRecyclerViewAdapter(MainActivity.this, webSocketMessageArrayList);
         recyclerView.setAdapter(messagesRecyclerViewAdapter);
+
         EditText editTextMessageToSend = findViewById(R.id.editTextMessageToSend);
 
         fab = findViewById(R.id.fab);
@@ -40,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
                 AppUtils.showSnackBar(fab, getString(R.string.PleaseEnterAMessageToSend));
             } else {
                 webSocketMessageArrayList.add(new WebSocketMessage(editTextMessageToSend.getText().toString(), new Date()));
+                messagesRecyclerViewAdapter.notifyItemInserted(webSocketMessageArrayList.size());
                 //connectToWsServer
                 AppSingleton.getInstance().sendMessageToWebSocketServer(fab, editTextMessageToSend.getText().toString());
             }
